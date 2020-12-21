@@ -6,21 +6,22 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import useForm from '../../../hooks/useForm';
 import styles from './LoginForm.module.css';
 
-function LoginForm({ onSubmit }) {
+function LoginForm({ onSubmit, loading }) {
   const [form, handleChange] = useForm({
     email: '',
     password: '',
     remember: false,
   });
   const { email, password, remember } = form;
+  const credentials = { email, password };
 
   const canSubmit = () => {
-    return !!(email && password);
+    return !loading && email && password;
   };
 
   const handleSubmit = ev => {
     ev.preventDefault();
-    onSubmit(form);
+    onSubmit(credentials);
   };
 
   return (

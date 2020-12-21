@@ -6,9 +6,11 @@ export const login = ({ remember, ...credentials }) =>
     if (remember) {
       storage.set('auth', auth);
     }
+    return auth.token;
   });
 
 export const logout = () =>
   client.logout().then(() => {
     storage.remove('auth');
   });
+
