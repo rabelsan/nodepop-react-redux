@@ -10,13 +10,13 @@ import { configureStore } from './store';
 // Read token from storage
 import './index.css';
 
-const { token } = storage.get('auth') || { token: null };
+const { token: auth } = storage.get('auth') || { token: null };
 
 // Configure api client
-configureClient(token);
+configureClient(auth);
 
 const history = createBrowserHistory();
-const store = configureStore({ token }, { history });
+const store = configureStore({ auth }, { history });
 
 ReactDOM.render(
   <Root store={store} history={history}>

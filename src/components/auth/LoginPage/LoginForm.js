@@ -13,7 +13,7 @@ function LoginForm({ onSubmit, loading }) {
     remember: false,
   });
   const { email, password, remember } = form;
-  const credentials = { email, password };
+  const credentials = { email, password, remember };
 
   const canSubmit = () => {
     return !loading && email && password;

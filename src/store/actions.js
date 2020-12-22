@@ -15,19 +15,17 @@ export const authLoginFailure = error => ({
   payload: error,
 });
   
-export const authLoginSuccess = loggedUserId => ({
+export const authLoginSuccess = loggedUserToken => ({
   type: AUTH_LOGIN_SUCCESS,
-  payload: loggedUserId,
+  payload: loggedUserToken,
 });
 
-export const login = crendentials => {
-    console.log('login');
+export const login = credentials => {
     return async function (dispatch, getState, { history, api }) {
-      console.log('executing thunk');
       dispatch(authLoginRequest());
       try {
-        const loggedUserId = await api.auth.login(crendentials);
-        dispatch(authLoginSuccess(loggedUserId));
+        const loggedUserToken =  await api.auth.login(credentials);
+        dispatch(authLoginSuccess(loggedUserToken));
         history.push('/adverts');
       } catch (error) {
         dispatch(authLoginFailure(error));
