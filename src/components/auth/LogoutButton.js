@@ -6,11 +6,11 @@ import { LogoutOutlined } from '@ant-design/icons';
 
 import { logout } from '../../api/auth';
 import ConfirmationButton from '../shared/ConfirmationButton';
-import { getLoggedUserId } from '../../store/selectors';
+import { getLoggedUserToken } from '../../store/selectors';
 import { authLogout } from '../../store/actions';
 
 function LogoutButton ( ...props) {
-  const loggeduserToken = useSelector(getLoggedUserId);
+  const loggeduserToken = useSelector(getLoggedUserToken);
   const dispatch = useDispatch();
   const onLogout = () => dispatch(authLogout());
 
@@ -20,7 +20,7 @@ function LogoutButton ( ...props) {
       icon={<LogoutOutlined />}
       shape="round"
       type="dashed"
-      disabled={!!loggeduserToken}
+      disabled={!(!!loggeduserToken)}
       confirmationProps={{
         title: 'Close session?',
         content: 'Are you sure you want to disconnect?',

@@ -13,7 +13,9 @@ const Header = () => (
       <Link to="/">Adverts</Link>
       <Link to="/adverts/new">New advert</Link>
     </Space>
+    <Space size="small">
     <LogoutButton className={styles.button}>Logout</LogoutButton>
+    </Space>
   </DesignHeader>
 );
 
