@@ -2,6 +2,10 @@ import * as types from './types';
 
 const initialState = {
   auth: null,
+  tags: {
+    list: null,
+    error: null,
+  },
   ui: {
     loading: false,
     error: null,
@@ -16,6 +20,19 @@ export const auth = (state = initialState.auth, action) => {
     case types.AUTH_LOGOUT:
       // logout
       return null;
+    default:
+      return state;
+  }
+};
+
+export const tags = (state = initialState.tags, action) => {
+  switch (action.type) {
+    case types.AUTH_TAGS_REQUEST:
+      return { ...state, error: null };
+    case types.AUTH_TAGS_SUCCESS:
+      return { ...state, list: action.payload, error: null };
+    case types.AUTH_TAGS_FAILURE:
+      return { ...state, list: null, error: action.error };
     default:
       return state;
   }

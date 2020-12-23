@@ -3,6 +3,9 @@ import {
   AUTH_LOGIN_FAILURE,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT,
+  AUTH_TAGS_REQUEST,
+  AUTH_TAGS_SUCCESS,
+  AUTH_TAGS_FAILURE,
 } from './types';
 
 export const authLoginRequest = () => ({
@@ -32,7 +35,33 @@ export const login = credentials => {
       }
     };
   };
-  
+
+  export const tagsRequest = () => ({
+    type: AUTH_TAGS_REQUEST,
+  });
+
+  export const tagsFailure = error => ({
+    type: AUTH_TAGS_FAILURE,
+    payload: error,
+  });
+
+  export const tagsSuccess = tagsList => ({
+    type: AUTH_TAGS_SUCCESS,
+    payload: tagsList,
+  });
+
+  export const tags = () => {
+    return async function (dispatch, getState, { history, api }) {
+      dispatch(tagsRequest());
+      try {
+        const tagsList =  await api.adverts.getTags();
+        dispatch(authLoginSuccess(tagsList));
+      } catch (error) {
+        dispatch(tagsFailure(error));
+      }
+    };
+  };
+    
   export const authLogout = () => {
     return {
       type: AUTH_LOGOUT,
