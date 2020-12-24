@@ -18,7 +18,7 @@ function LoginPage ({ onLogin, loading, error}) {
         <LoginForm onSubmit={onLogin} loading={loading}/>
         {error && (
           <Alert
-            closable
+            closable 
             message={error}
             showIcon
             type="error"

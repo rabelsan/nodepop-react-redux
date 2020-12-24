@@ -1,15 +1,23 @@
 import React, {useState, useEffect} from 'react';
+import { connect } from 'react-redux'; 
+import T from 'prop-types';
 import { Select } from 'antd';
 
-import { getTags } from '../../api/adverts';
+import {tags} from '../../store/actions';
+import { getTags } from '../../store/selectors';
 
 const { Option } = Select;
 
-function TagsSelect () {
+function TagsSelect (...props) {
   const [tags, setTags] = useState(null);
+  console.log(...props);
 
   useEffect( 
-    () => setTags(),
+    () => { 
+      //findTags();
+      setTags(getTags().list);
+    } ,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [tags]
   );
 
@@ -27,4 +35,11 @@ function TagsSelect () {
   );
 }
 
-export default TagsSelect;
+TagsSelect.propTypes = {
+  onChange: T.func.isRequired,
+};
+
+export default connect(getTags, dispatch => ({
+  findTags: () => dispatch(tags()),
+}))(TagsSelect);
+

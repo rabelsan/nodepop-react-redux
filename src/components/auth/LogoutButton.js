@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import T from 'prop-types';
+//import T from 'prop-types';
 import { LogoutOutlined } from '@ant-design/icons';
 
 import { logout } from '../../api/auth';
@@ -36,8 +36,8 @@ function LogoutButton ( ...props) {
   );
 }
 
-LogoutButton.propTypes = {
-  onLogout: T.func.isRequired,
-};
+//LogoutButton.propTypes = {
+//  onLogout: T.func.isRequired,
+//};
 
 export default LogoutButton;
