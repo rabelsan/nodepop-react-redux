@@ -31,7 +31,6 @@ function LogoutButton ( ...props) {
         },
       }}
       onConfirm={() => logout().then(onLogout)}
-      { ...props }
     />
   );
 }

@@ -3,6 +3,9 @@ import {
   AUTH_LOGIN_FAILURE,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT,
+  AUTH_ADS_REQUEST,
+  AUTH_ADS_SUCCESS,
+  AUTH_ADS_FAILURE,
   AUTH_TAGS_REQUEST,
   AUTH_TAGS_SUCCESS,
   AUTH_TAGS_FAILURE,
@@ -36,6 +39,32 @@ export const login = credentials => {
     };
   };
 
+  export const adsRequest = () => ({
+    type: AUTH_ADS_REQUEST,
+  });
+
+  export const adsFailure = error => ({
+    type: AUTH_ADS_FAILURE,
+    payload: error,
+  });
+
+  export const adsSuccess = adsList => ({
+    type: AUTH_ADS_SUCCESS,
+    payload: adsList,
+  });
+
+  export const loadAds = filters => {
+    return async function (dispatch, getState, { history, api }) {
+      dispatch(adsRequest());
+      try {
+        const ads =  await api.adverts.getAdverts(filters);
+        dispatch(adsSuccess(ads.result));
+      } catch (error) {
+        dispatch(adsFailure(error));
+      }
+    };
+  };
+
   export const tagsRequest = () => ({
     type: AUTH_TAGS_REQUEST,
   });
@@ -50,12 +79,12 @@ export const login = credentials => {
     payload: tagsList,
   });
 
-  export const tags = () => {
+  export const loadTags = () => {
     return async function (dispatch, getState, { history, api }) {
       dispatch(tagsRequest());
       try {
-        const tagsList =  await api.adverts.getTags();
-        dispatch(authLoginSuccess(tagsList));
+        const tags =  await api.adverts.getTags();
+        dispatch(tagsSuccess(tags.result));
       } catch (error) {
         dispatch(tagsFailure(error));
       }

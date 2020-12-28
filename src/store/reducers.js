@@ -2,8 +2,13 @@ import * as types from './types';
 
 const initialState = {
   auth: null,
+  ads: {
+    list: [],
+    loading: false,
+    error: null,
+  },
   tags: {
-    list: null,
+    list: [],
     error: null,
   },
   ui: {
@@ -25,14 +30,27 @@ export const auth = (state = initialState.auth, action) => {
   }
 };
 
+export const ads = (state = initialState.ads, action) => {
+  switch (action.type) {
+    case types.AUTH_ADS_REQUEST:
+      return { ...state, list: [], loading:true, error: null };
+    case types.AUTH_ADS_SUCCESS:
+      return { ...state, list: action.payload, loading: false, error: null };
+    case types.AUTH_ADS_FAILURE:
+      return { ...state, list: [], loading: false, error: action.error };
+    default:
+      return state;
+  }
+};
+
 export const tags = (state = initialState.tags, action) => {
   switch (action.type) {
     case types.AUTH_TAGS_REQUEST:
-      return { ...state, error: null };
+      return { ...state, list: [], error: null };
     case types.AUTH_TAGS_SUCCESS:
       return { ...state, list: action.payload, error: null };
     case types.AUTH_TAGS_FAILURE:
-      return { ...state, list: null, error: action.error };
+      return { ...state, list: [], error: action.error };
     default:
       return state;
   }

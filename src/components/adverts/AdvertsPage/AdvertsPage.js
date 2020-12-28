@@ -1,26 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { connect, useStore } from 'react-redux';
 import { Empty, Button, Spin, List, Divider } from 'antd';
 
 import storage from '../../../utils/storage';
-import { getAdverts } from '../../../api/adverts';
 import Layout from '../../layout';
 import FiltersForm, { defaultFilters } from './FiltersForm';
 import AdvertCard from './AdvertCard';
 
-class AdvertsPage extends React.Component {
-  state = {
+import { loadTags, loadAds } from '../../../store/actions';
+import { getTags, getAds } from '../../../store/selectors';
+
+function AdvertsPage  () {
+  const [form, setForm] = useState({
     adverts: null,
     loading: false,
     error: null,
     filters: storage.get('filters') || defaultFilters,
-  };
+  });
 
-  formatFilters = () => {
+  const store = useStore();
+  console.log(store.getTags(store));
+
+  useEffect(
+    () => { loadTags(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , []
+  );
+
+  useEffect(
+    () => { loadAds(formatFilters()); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [form.filters]
+  );
+  
+  const formatFilters = () => {
     const {
-      filters: { name, sale, price, tags },
-    } = this.state;
-
+      filters: { name, sale, price, tags } 
+    }  = form;
+  
     const filters = {};
     if (name) {
       filters.name = name;
@@ -38,41 +56,32 @@ class AdvertsPage extends React.Component {
     return filters;
   };
 
-  getAdverts = () => {
-    this.setState({ loading: true, error: null });
-    getAdverts(this.formatFilters())
-      .then(({ result }) =>
-        this.setState({ loading: false, adverts: result.rows }),
-      )
-      .catch(error => this.setState({ loading: false, error }));
-  };
-
-  handleSubmit = filters => {
+  const handleSubmit = filters => {
     storage.set('filters', filters);
-    this.setState({ filters });
+    setForm({...form, filters });
   };
 
-  renderLoading = () => (
+  const renderLoading = () => (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <Spin size="large" />
     </div>
   );
 
-  renderError = () => {
-    const { error } = this.state;
+  const renderError = () => {
+    const { error } = form;
     return (
       <Empty
         description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
       >
-        <Button type="primary" danger onClick={this.getAdverts}>
+        <Button type="primary" danger onClick={loadAds(formatFilters())}>
           Reload
         </Button>
       </Empty>
     );
   };
 
-  renderEmpty = () => {
-    const { filters } = this.state;
+  const renderEmpty = () => {
+    const { filters } = form;
     const isFiltered =
       JSON.stringify(filters) !== JSON.stringify(defaultFilters);
     return (
@@ -88,7 +97,7 @@ class AdvertsPage extends React.Component {
     );
   };
 
-  renderAdvert = advert => {
+  const renderAdvert = advert => {
     return (
       <List.Item>
         <Link to={`/adverts/${advert._id}`}>
@@ -98,15 +107,15 @@ class AdvertsPage extends React.Component {
     );
   };
 
-  renderAdverts = () => {
-    const { adverts, loading, error } = this.state;
+  const renderAdverts = () => {
+    const { adverts, loading, error } = form;
 
     if (loading) {
-      return this.renderLoading();
+      return renderLoading();
     }
 
     if (error) {
-      return this.renderError();
+      return renderError();
     }
 
     if (!adverts) {
@@ -114,40 +123,28 @@ class AdvertsPage extends React.Component {
     }
 
     if (!adverts.length) {
-      return this.renderEmpty();
+      return renderEmpty();
     }
 
     return (
       <List
         grid={{ gutter: 16, column: 3 }}
         dataSource={adverts}
-        renderItem={this.renderAdvert}
+        renderItem={renderAdvert}
       />
     );
   };
 
-  componentDidMount() {
-    this.getAdverts();
-  }
-
-  componentDidUpdate(prevProps, { filters: prevFilters }) {
-    const { filters } = this.state;
-    if (JSON.stringify(filters) !== JSON.stringify(prevFilters)) {
-      this.getAdverts();
-    }
-  }
-
-  render() {
-    const { filters } = this.state;
-    return (
-      <Layout title="Adverts list">
-        <Divider>Filter your adverts</Divider>
-        <FiltersForm initialFilters={filters} onSubmit={this.handleSubmit} />
-        <Divider>Adverts</Divider>
-        {this.renderAdverts()}
-      </Layout>
-    );
-  }
+  return (
+    <Layout title="Adverts list">
+      <Divider>Filter your adverts</Divider>
+      <FiltersForm initialFilters={form.filters} onSubmit={handleSubmit} />
+      <Divider>Adverts</Divider>
+      {renderAdverts()}
+    </Layout>
+  );
 }
 
-export default AdvertsPage;
+export default connect(getAds, dispatch => ({
+  loadAds: (filters) => dispatch(loadAds(filters)),
+}))(AdvertsPage);

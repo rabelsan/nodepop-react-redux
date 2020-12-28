@@ -15,9 +15,7 @@ function App () {
         <Route path="/login" exact>
             {({ history }) => <LoginPage history={history} />}
         </Route>
-        <PrivateRoute path="/adverts" exact>
-          <AdvertsPage />
-        </PrivateRoute>
+        <PrivateRoute path="/adverts" exact component={AdvertsPage} />
         <PrivateRoute path="/adverts/new" exact component={NewAdvertPage} />
         <PrivateRoute path="/adverts/:id" exact component={AdvertPage} />
         <Route path="/404" exact>
