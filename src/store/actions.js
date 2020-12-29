@@ -58,7 +58,7 @@ export const login = credentials => {
       dispatch(adsRequest());
       try {
         const ads =  await api.adverts.getAdverts(filters);
-        dispatch(adsSuccess(ads.result));
+        dispatch(adsSuccess(ads.result.rows));
       } catch (error) {
         dispatch(adsFailure(error));
       }

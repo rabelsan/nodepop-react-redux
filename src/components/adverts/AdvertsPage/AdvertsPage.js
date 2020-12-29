@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect, useStore } from 'react-redux';
+import { connect } from 'react-redux';
+import T from 'prop-types';
 import { Empty, Button, Spin, List, Divider } from 'antd';
 
 import storage from '../../../utils/storage';
@@ -9,29 +10,20 @@ import FiltersForm, { defaultFilters } from './FiltersForm';
 import AdvertCard from './AdvertCard';
 
 import { loadTags, loadAds } from '../../../store/actions';
-import { getTags, getAds } from '../../../store/selectors';
+import { getAds } from '../../../store/selectors';
 
-function AdvertsPage  () {
+function AdvertsPage  ({adverts, loading, error, findAds, ...props}) {
   const [form, setForm] = useState({
-    adverts: null,
-    loading: false,
-    error: null,
     filters: storage.get('filters') || defaultFilters,
   });
 
-  const store = useStore();
-  console.log(store.getTags(store));
-
   useEffect(
-    () => { loadTags(); }
+    () => { 
+      loadTags();
+      findAds(formatFilters());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , []
-  );
-
-  useEffect(
-    () => { loadAds(formatFilters()); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    , [form.filters]
   );
   
   const formatFilters = () => {
@@ -59,6 +51,8 @@ function AdvertsPage  () {
   const handleSubmit = filters => {
     storage.set('filters', filters);
     setForm({...form, filters });
+    findAds(filters);
+    setForm(...form, { adverts, loading, error });
   };
 
   const renderLoading = () => (
@@ -108,8 +102,6 @@ function AdvertsPage  () {
   };
 
   const renderAdverts = () => {
-    const { adverts, loading, error } = form;
-
     if (loading) {
       return renderLoading();
     }
@@ -145,6 +137,11 @@ function AdvertsPage  () {
   );
 }
 
+AdvertsPage.propTypes = {
+  findAds: T.func.isRequired,
+  adverts: T.array.isRequired,
+};
+
 export default connect(getAds, dispatch => ({
-  loadAds: (filters) => dispatch(loadAds(filters)),
+  findAds: (filters) => dispatch(loadAds(filters)),
 }))(AdvertsPage);
