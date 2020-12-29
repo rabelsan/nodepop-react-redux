@@ -4,22 +4,26 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-function TagsSelect ({onChange, tags}) {
+function TagsSelect ({onChange, options, value}) {
   return (
     <Select
       allowClear
-      disabled={!tags}
+      disabled={!options}
       mode="multiple"
       placeholder="Select tags"
+      value={value}
+      onChange={onChange}
       style={{ width: '100%' }}
     >
-      {tags && tags.map(tag => <Option key={tag}>{tag}</Option>)}
+      {options && options.map(tag => <Option key={tag}>{tag}</Option>)}
     </Select>
   );
 }
 
 TagsSelect.propTypes = {
   onChange: T.func.isRequired,
+  options: T.arrayOf(T.string).isRequired,
+  value: T.arrayOf(T.string),
 };
 
 export default TagsSelect;

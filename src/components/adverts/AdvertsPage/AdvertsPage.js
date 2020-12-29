@@ -9,19 +9,16 @@ import Layout from '../../layout';
 import FiltersForm, { defaultFilters } from './FiltersForm';
 import AdvertCard from './AdvertCard';
 
-import { loadTags, loadAds } from '../../../store/actions';
+import { loadAds } from '../../../store/actions';
 import { getAds } from '../../../store/selectors';
 
-function AdvertsPage  ({adverts, loading, error, findAds, ...props}) {
+function AdvertsPage  ({adverts, loading, error, findAds}) {
   const [form, setForm] = useState({
     filters: storage.get('filters') || defaultFilters,
   });
 
   useEffect(
-    () => { 
-      loadTags();
-      findAds(formatFilters());
-    }
+    () => { findAds(formatFilters()); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , []
   );
@@ -44,15 +41,13 @@ function AdvertsPage  ({adverts, loading, error, findAds, ...props}) {
     if (tags.length) {
       filters.tags = tags.join(',');
     }
-
     return filters;
   };
 
   const handleSubmit = filters => {
     storage.set('filters', filters);
     setForm({...form, filters });
-    findAds(filters);
-    setForm(...form, { adverts, loading, error });
+    findAds(formatFilters());
   };
 
   const renderLoading = () => (
@@ -139,7 +134,7 @@ function AdvertsPage  ({adverts, loading, error, findAds, ...props}) {
 
 AdvertsPage.propTypes = {
   findAds: T.func.isRequired,
-  adverts: T.array.isRequired,
+  adverts: T.arrayOf(T.object).isRequired,
 };
 
 export default connect(getAds, dispatch => ({

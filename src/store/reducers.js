@@ -8,7 +8,7 @@ const initialState = {
     error: null,
   },
   tags: {
-    tags: [],
+    list: [],
     error: null,
   },
   ui: {
@@ -46,11 +46,11 @@ export const ads = (state = initialState.ads, action) => {
 export const tags = (state = initialState.tags, action) => {
   switch (action.type) {
     case types.AUTH_TAGS_REQUEST:
-      return { ...state, tags: [], error: null };
+      return { ...state, list: [], error: null };
     case types.AUTH_TAGS_SUCCESS:
-      return { ...state, tags: action.payload, error: null };
+      return { ...state, list: action.payload, error: null };
     case types.AUTH_TAGS_FAILURE:
-      return { ...state, tags: [], error: action.error };
+      return { ...state, list: [], error: action.error };
     default:
       return state;
   }

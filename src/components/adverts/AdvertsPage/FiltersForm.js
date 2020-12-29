@@ -18,7 +18,7 @@ export const defaultFilters = {
   tags: [],
 };
 
-function FiltersForm ({findTags, list, initialFilters, onSubmit}) {
+function FiltersForm ({findTags, list, error, initialFilters, onSubmit}) {
   const [filters, setFilters] = useState(initialFilters);
 
   useEffect( 
@@ -38,12 +38,10 @@ function FiltersForm ({findTags, list, initialFilters, onSubmit}) {
   };
   const handleSaleChange = ev => setFilters({...filters, sale: ev.target.value });
   const handleTagsChange = tags => {
-    console.log(tags);
     setFilters({...filters, tags });
   }
 
   const handleSubmit = ev => {
-    //const { onSubmit } = props;
     ev.preventDefault();
     onSubmit(filters);
   };
@@ -83,7 +81,7 @@ function FiltersForm ({findTags, list, initialFilters, onSubmit}) {
         </Col>
         <Col span={11} offset={2}>
           <FormField label="By tags">
-            <TagsSelect onChange={handleTagsChange} value={list}/>
+            <TagsSelect onChange={handleTagsChange} options={list} defaultValue={tags}/>
           </FormField>
           <FormField label="By type">
             <Radio.Group
@@ -113,7 +111,7 @@ FiltersForm.propTypes = {
     name: T.string,
     sale: T.oneOf(Object.keys(saleOptions)),
     price: T.arrayOf(T.number),
-    tags: T.arrayOf(T.string),
+    tagsList: T.arrayOf(T.string),
   }),
   onSubmit: T.func.isRequired,
 };
