@@ -4,14 +4,14 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-function TagsSelect ({onChange, options, value}) {
+function TagsSelect ({onChange, options, defaultValue}) {
   return (
     <Select
       allowClear
       disabled={!options}
       mode="multiple"
       placeholder="Select tags"
-      value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
       style={{ width: '100%' }}
     >

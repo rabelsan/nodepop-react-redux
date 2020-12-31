@@ -57,7 +57,6 @@ export const login = credentials => {
     return async function (dispatch, getState, { history, api }) {
       dispatch(adsRequest());
       try {
-        console.log(filters);
         const ads =  await api.adverts.getAdverts(filters);
         dispatch(adsSuccess(ads.result.rows));
       } catch (error) {

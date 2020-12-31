@@ -20,7 +20,7 @@ function AdvertsPage  ({adverts, loading, error, findAds}) {
   useEffect(
     () => { findAds(formatFilters()); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    , []
+    , [form]
   );
   
   const formatFilters = () => {
@@ -45,9 +45,8 @@ function AdvertsPage  ({adverts, loading, error, findAds}) {
   };
 
   const handleSubmit = filters => {
-    storage.set('filters', filters);
-    setForm({...form, filters });
-    findAds(formatFilters());
+    storage.set('filters', filters);   
+    setForm({...form, filters:filters});
   };
 
   const renderLoading = () => (
