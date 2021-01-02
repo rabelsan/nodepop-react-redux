@@ -32,12 +32,14 @@ export const auth = (state = initialState.auth, action) => {
 
 export const ads = (state = initialState.ads, action) => {
   switch (action.type) {
-    case types.AUTH_ADS_REQUEST:
+    case types.ADS_REQUEST:
       return { ...state, adverts: [], loading:true, error: null };
-    case types.AUTH_ADS_SUCCESS:
+    case types.ADS_SUCCESS:
       return { ...state, adverts: action.payload, loading: false, error: null };
-    case types.AUTH_ADS_FAILURE:
-      return { ...state, adverts: [], loading: false, error: action.error };
+    case types.ADS_FAILURE:
+      return { ...state, adverts: [], loading: false, error: action.payload };
+    case types.ADS_CREATED:
+      return { ...state, adverts: action.payload, loading: false, error: null };
     default:
       return state;
   }
@@ -45,12 +47,12 @@ export const ads = (state = initialState.ads, action) => {
 
 export const tags = (state = initialState.tags, action) => {
   switch (action.type) {
-    case types.AUTH_TAGS_REQUEST:
+    case types.TAGS_REQUEST:
       return { ...state, list: [], error: null };
-    case types.AUTH_TAGS_SUCCESS:
+    case types.TAGS_SUCCESS:
       return { ...state, list: action.payload, error: null };
-    case types.AUTH_TAGS_FAILURE:
-      return { ...state, list: [], error: action.error };
+    case types.TAGS_FAILURE:
+      return { ...state, list: [], error: action.payload };
     default:
       return state;
   }

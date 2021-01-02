@@ -4,11 +4,13 @@ export const AUTH_LOGIN_FAILURE = 'auth/LOGIN_FAILURE';
 
 export const AUTH_LOGOUT = 'auth/LOGOUT';
 
-export const AUTH_ADS_REQUEST = 'auth/ADS_REQUEST';
-export const AUTH_ADS_SUCCESS = 'auth/ADS_SUCCESS';
-export const AUTH_ADS_FAILURE = 'auth/ADS_FAILURE';
+export const ADS_REQUEST = 'ads/REQUEST';
+export const ADS_SUCCESS = 'ads/SUCCESS';
+export const ADS_FAILURE = 'ads/FAILURE';
+export const ADS_CREATED = 'ads/CREATED';
 
-export const AUTH_TAGS_REQUEST = 'auth/TAGS_REQUEST';
-export const AUTH_TAGS_SUCCESS = 'auth/TAGS_SUCCESS';
-export const AUTH_TAGS_FAILURE = 'auth/TAGS_FAILURE';
+
+export const TAGS_REQUEST = 'tags/REQUEST';
+export const TAGS_SUCCESS = 'tags/SUCCESS';
+export const TAGS_FAILURE = 'tags/FAILURE';
 

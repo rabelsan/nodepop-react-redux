@@ -3,12 +3,13 @@ import {
   AUTH_LOGIN_FAILURE,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT,
-  AUTH_ADS_REQUEST,
-  AUTH_ADS_SUCCESS,
-  AUTH_ADS_FAILURE,
-  AUTH_TAGS_REQUEST,
-  AUTH_TAGS_SUCCESS,
-  AUTH_TAGS_FAILURE,
+  ADS_REQUEST,
+  ADS_SUCCESS,
+  ADS_FAILURE,
+  ADS_CREATED,
+  TAGS_REQUEST,
+  TAGS_SUCCESS,
+  TAGS_FAILURE,
 } from './types';
 
 export const authLoginRequest = () => ({
@@ -40,16 +41,16 @@ export const login = credentials => {
   };
 
   export const adsRequest = () => ({
-    type: AUTH_ADS_REQUEST,
+    type: ADS_REQUEST,
   });
 
   export const adsFailure = error => ({
-    type: AUTH_ADS_FAILURE,
+    type: ADS_FAILURE,
     payload: error,
   });
 
   export const adsSuccess = adsList => ({
-    type: AUTH_ADS_SUCCESS,
+    type: ADS_SUCCESS,
     payload: adsList,
   });
 
@@ -66,16 +67,16 @@ export const login = credentials => {
   };
 
   export const tagsRequest = () => ({
-    type: AUTH_TAGS_REQUEST,
+    type: TAGS_REQUEST,
   });
 
   export const tagsFailure = error => ({
-    type: AUTH_TAGS_FAILURE,
+    type: TAGS_FAILURE,
     payload: error,
   });
 
   export const tagsSuccess = tagsList => ({
-    type: AUTH_TAGS_SUCCESS,
+    type: TAGS_SUCCESS,
     payload: tagsList,
   });
 

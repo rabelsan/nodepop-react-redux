@@ -12,7 +12,7 @@ import AdvertCard from './AdvertCard';
 import { loadAds } from '../../../store/actions';
 import { getAds } from '../../../store/selectors';
 
-function AdvertsPage  ({adverts, loading, error, findAds}) {
+function AdvertsPage  ({adverts, loading, error, findAds, history}) {
   const [form, setForm] = useState({
     filters: storage.get('filters') || defaultFilters,
   });
@@ -49,19 +49,22 @@ function AdvertsPage  ({adverts, loading, error, findAds}) {
     setForm({...form, filters:filters});
   };
 
+  const handleReload = () => {
+    history.push('/');
+  }
+
   const renderLoading = () => (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <Spin size="large" />
     </div>
   );
 
-  const renderError = () => {
-    const { error } = form;
+  const renderError = (error) => {
     return (
       <Empty
         description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
       >
-        <Button type="primary" danger onClick={loadAds(formatFilters())}>
+        <Button type="primary" danger onClick={handleReload}>
           Reload
         </Button>
       </Empty>
@@ -101,7 +104,7 @@ function AdvertsPage  ({adverts, loading, error, findAds}) {
     }
 
     if (error) {
-      return renderError();
+      return renderError(error);
     }
 
     if (!adverts) {
@@ -132,8 +135,12 @@ function AdvertsPage  ({adverts, loading, error, findAds}) {
 }
 
 AdvertsPage.propTypes = {
-  findAds: T.func.isRequired,
   adverts: T.arrayOf(T.object).isRequired,
+  loading: T.bool.isRequired,
+  error: T.string.isRequired,
+  findAds: T.func.isRequired,
+  history: T.shape({ push: T.func.isRequired }).isRequired,
+
 };
 
 export default connect(getAds, dispatch => ({
