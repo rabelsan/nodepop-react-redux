@@ -49,8 +49,8 @@ function AdvertsPage  ({adverts, loading, error, findAds, history}) {
     setForm({...form, filters:filters});
   };
 
-  const handleReload = () => {
-    history.push('/');
+  const handleReloadClick = (error) => {
+    error === "jwt expired" ? history.push('/login') : history.push('/');
   }
 
   const renderLoading = () => (
@@ -64,7 +64,7 @@ function AdvertsPage  ({adverts, loading, error, findAds, history}) {
       <Empty
         description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
       >
-        <Button type="primary" danger onClick={handleReload}>
+        <Button type="primary" danger onClick={handleReloadClick(error)}>
           Reload
         </Button>
       </Empty>
@@ -137,7 +137,7 @@ function AdvertsPage  ({adverts, loading, error, findAds, history}) {
 AdvertsPage.propTypes = {
   adverts: T.arrayOf(T.object).isRequired,
   loading: T.bool.isRequired,
-  error: T.string.isRequired,
+  error: T.string,
   findAds: T.func.isRequired,
   history: T.shape({ push: T.func.isRequired }).isRequired,
 

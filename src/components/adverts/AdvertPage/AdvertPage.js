@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
+import { useParams } from 'react-router';
 import { Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Divider, Image, Typography, Statistic, Row, Col } from 'antd';
 
-import { getAdvert, deleteAdvert } from '../../../api/adverts';
+import { deleteAdvert } from '../../../api/adverts';
+import { getAdvertById } from '../../../store/selectors';
+
 import Layout from '../../layout';
 import { ConfirmationButton } from '../../shared';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -12,35 +16,29 @@ import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
-
-class AdvertPage extends React.Component {
-  state = {
+function AdvertPage ({ history, match })  {
+  const [form, setForm] = useState({
     advert: null,
     error: null,
+  });
+
+  const { id } = match.params.id;
+
+  useEffect( () => {
+    const result = useSelector(getAdvertById(id));
+    if (!result) {
+      setForm ({ ...form, error: { message: 'Not found' }});
+    } else {
+      setForm({ ...form, advert: result });
+    }}, []
+  ); 
+  
+  const handleDeleteClick = (id) => {
+    deleteAdvert(id).then(() => history.push('/'));
   };
 
-  getAdvertId = () => this.props.match.params.id;
-
-  handleDeleteClick = () => {
-    const { history } = this.props;
-    deleteAdvert(this.getAdvertId()).then(() => history.push('/'));
-  };
-
-  getAdvert = async () => {
-    try {
-      const { result } = await getAdvert(this.getAdvertId());
-      if (!result) {
-        const error = { message: 'Not found' };
-        throw error;
-      }
-      this.setState({ advert: result });
-    } catch (error) {
-      this.setState({ error });
-    }
-  };
-
-  renderAdvert = () => {
-    const { advert, error } = this.state;
+  const renderAdvert = () => {
+    const { advert, error } = form;
 
     if (error) {
       return <Redirect to="/404" />;
@@ -87,7 +85,7 @@ class AdvertPage extends React.Component {
               danger: true,
             },
           }}
-          onConfirm={this.handleDeleteClick}
+          onConfirm={handleDeleteClick}
           style={{ marginTop: 20 }}
           block
         >
@@ -97,23 +95,17 @@ class AdvertPage extends React.Component {
     );
   };
 
-  componentDidMount() {
-    this.getAdvert();
-  }
-
-  render() {
-    return (
-      <Layout title="Advert detail">
-        <Divider>Detail of your advert</Divider>
-        {this.renderAdvert()}
-      </Layout>
-    );
-  }
+  return (
+    <Layout title="Advert detail">
+      <Divider>Detail of your advert</Divider>
+      {renderAdvert()}
+    </Layout>
+  );
 }
 
 AdvertPage.propTypes = {
-  match: T.shape({ params: T.shape({ id: T.string.isRequired }).isRequired })
-    .isRequired,
+  history: T.shape({ push: T.func.isRequired }).isRequired,
+  match: T.shape({ params: T.shape({ id: T.string.isRequired }).isRequired }).isRequired,
 };
 
 export default AdvertPage;
