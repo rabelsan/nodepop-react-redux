@@ -16,22 +16,23 @@ import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
-function AdvertPage ({ history, match })  {
+function AdvertPage ({ history })  {
   const [form, setForm] = useState({
     advert: null,
     error: null,
-  });
+  }); 
 
-  const { id } = match.params.id;
+  const { id } = useParams();
+  const advert = useSelector(getAdvertById(id));
 
   useEffect( () => {
-    const result = useSelector(getAdvertById(id));
-    if (!result) {
+    if (!advert) {
       setForm ({ ...form, error: { message: 'Not found' }});
     } else {
-      setForm({ ...form, advert: result });
-    }}, []
-  ); 
+      setForm({ ...form, advert: advert });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }}, [advert]
+  );  
   
   const handleDeleteClick = (id) => {
     deleteAdvert(id).then(() => history.push('/'));
@@ -105,7 +106,6 @@ function AdvertPage ({ history, match })  {
 
 AdvertPage.propTypes = {
   history: T.shape({ push: T.func.isRequired }).isRequired,
-  match: T.shape({ params: T.shape({ id: T.string.isRequired }).isRequired }).isRequired,
 };
 
 export default AdvertPage;
