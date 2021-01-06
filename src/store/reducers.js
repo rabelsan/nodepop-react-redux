@@ -38,7 +38,9 @@ export const ads = (state = initialState.ads, action) => {
       return { ...state, adverts: action.payload, loading: false, error: null };
     case types.ADS_FAILURE:
       return { ...state, adverts: [], loading: false, error: action.payload };
-    case types.ADS_CREATED:
+    case types.ADS_DELETE:
+      return { ...state, adverts: action.payload, loading: false, error: null };
+    case types.ADS_CREATE:
       return { ...state, adverts: action.payload, loading: false, error: null };
     default:
       return state;

@@ -49,7 +49,8 @@ function AdvertsPage  ({adverts, loading, error, findAds, history}) {
     setForm({...form, filters:filters});
   };
 
-  const handleReloadClick = (error) => {
+  const handleReloadClick = ev => {
+    ev.stopPropagation();
     error === "jwt expired" ? history.push('/login') : history.push('/');
   }
 
@@ -64,7 +65,7 @@ function AdvertsPage  ({adverts, loading, error, findAds, history}) {
       <Empty
         description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
       >
-        <Button type="primary" danger onClick={handleReloadClick(error)}>
+        <Button type="primary" danger onClick={handleReloadClick}>
           Reload
         </Button>
       </Empty>

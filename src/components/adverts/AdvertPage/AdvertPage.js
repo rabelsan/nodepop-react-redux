@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
 import { useParams } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { Divider, Image, Typography, Statistic, Row, Col } from 'antd';
 
-import { deleteAdvert } from '../../../api/adverts';
+import { deleteAd } from '../../../store/actions';
 import { getAdvertById } from '../../../store/selectors';
 
 import Layout from '../../layout';
@@ -16,7 +16,7 @@ import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
-function AdvertPage ({ history })  {
+function AdvertPage ({ delAd, history })  {
   const [form, setForm] = useState({
     advert: null,
     error: null,
@@ -34,8 +34,9 @@ function AdvertPage ({ history })  {
     }}, [advert]
   );  
   
-  const handleDeleteClick = (id) => {
-    deleteAdvert(id).then(() => history.push('/'));
+  const handleDeleteClick = () => {
+    const { advert } = form;
+    delAd(advert._id).then(history.push('/'));
   };
 
   const renderAdvert = () => {
@@ -105,7 +106,10 @@ function AdvertPage ({ history })  {
 }
 
 AdvertPage.propTypes = {
+  delAd: T.func.isRequired,
   history: T.shape({ push: T.func.isRequired }).isRequired,
 };
 
-export default AdvertPage;
+export default connect(null, dispatch => ({
+  delAd: () => dispatch(deleteAd()),
+}))(AdvertPage);
