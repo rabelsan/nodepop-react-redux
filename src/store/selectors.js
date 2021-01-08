@@ -4,6 +4,8 @@ export const getUi = state => state.ui;
 
 export const getAds = state => state.ads;
 
+export const getAdStatus = state => state.adStatus;
+
 export const getAdvertById = id => state => {
   let result = getAds(state);
   if (!result) {

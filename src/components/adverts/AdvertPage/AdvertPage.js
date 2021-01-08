@@ -6,7 +6,7 @@ import { useSelector, connect } from 'react-redux';
 import { Divider, Image, Typography, Statistic, Row, Col, Empty } from 'antd';
 
 import { deleteAd } from '../../../store/actions';
-import { getAds, getAdvertById } from '../../../store/selectors';
+import { getAdStatus, getAdvertById } from '../../../store/selectors';
 
 import Layout from '../../layout';
 import { ConfirmationButton } from '../../shared';
@@ -16,7 +16,7 @@ import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
-function AdvertPage ({ loading, error: errorDelete, delAd, history })  {
+function AdvertPage ({ history, delAd, processing, errChange })  {
   const [form, setForm] = useState({
     advert: null,
     error: null,
@@ -37,17 +37,17 @@ function AdvertPage ({ loading, error: errorDelete, delAd, history })  {
   const handleDeleteClick = () => {
     const { advert } = form;
     delAd(advert._id);
-    if (!errorDelete) {
+    if (!errChange) {
       history.push('/');
     }  
   };
 
-  const renderErrorDelete = (errorDelete) => {
-    if (errorDelete) {
+  const rendererrChange = (errChange) => {
+    if (errChange) {
       return (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={<span style={{ color: '#ff4d4f' }}>{`${errorDelete === null ? '' : errorDelete}`}</span>}
+          description={<span style={{ color: '#ff4d4f' }}>{`${errChange === null ? '' : errChange}`}</span>}
         />
       )
     }
@@ -90,7 +90,7 @@ function AdvertPage ({ loading, error: errorDelete, delAd, history })  {
           />
         </Col>
         <ConfirmationButton
-          disabled = {loading}
+          disabled = {processing}
           danger
           icon={<DeleteOutlined />}
           confirmationProps={{
@@ -108,7 +108,7 @@ function AdvertPage ({ loading, error: errorDelete, delAd, history })  {
         >
           Delete
         </ConfirmationButton>
-        {renderErrorDelete(errorDelete)}
+        {rendererrChange(errChange)}
       </Row>
     );
   };
@@ -122,10 +122,12 @@ function AdvertPage ({ loading, error: errorDelete, delAd, history })  {
 }
 
 AdvertPage.propTypes = {
-  delAd: T.func.isRequired,
   history: T.shape({ push: T.func.isRequired }).isRequired,
+  delAd: T.func.isRequired,
+  processing: T.bool.isRequired,
+  errChange: T.string,
 };
 
-export default connect(getAds, dispatch => ({
+export default connect(getAdStatus, dispatch => ({
   delAd: (id) => dispatch(deleteAd(id)),
 }))(AdvertPage);

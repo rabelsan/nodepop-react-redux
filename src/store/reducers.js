@@ -7,6 +7,11 @@ const initialState = {
     loading: false,
     error: null,
   },
+  adStatus: {
+    processing: false,
+    errorChange: null,
+    result: null,
+  },
   tags: {
     list: [],
     error: null,
@@ -38,14 +43,25 @@ export const ads = (state = initialState.ads, action) => {
       return { ...state, adverts: action.payload, loading: false, error: null };
     case types.ADS_FAILURE:
       return { ...state, adverts: [], loading: false, error: action.payload };
-    case types.ADS_DELETE:
-      return { ...state, loading: true, error: null };
-    case types.ADS_DELETE_SUCCESS:
-      return { ...state, loading: false, error: null };
-    case types.ADS_DELETE_FAILURE:
-        return { ...state, loading: false, error: action.payload };
-    case types.ADS_CREATE:
-      return { ...state, adverts: action.payload, loading: false, error: null };
+    default:
+      return state;
+  }
+};
+
+export const adStatus = (state = initialState.adStatus, action) => {
+  switch (action.type) {
+    case types.AD_DELETE:
+      return { ...state, processing: true, errChange: null, result: null };
+    case types.AD_DELETE_SUCCESS:
+      return { ...state, processing: false, errChange: null, result: action.payload };
+    case types.AD_DELETE_FAILURE:
+        return { ...state, processing: false, errChange: action.payload, result:null };
+    case types.AD_CREATE:
+      return { ...state, processing: true, errChange: false, result: null };
+    case types.AD_CREATE_SUCCESS:
+      return { ...state, processing: false, errChange: false, result: action.payload };
+    case types.AD_CREATE_FAILURE:
+      return { ...state, processing: false, errChange: action.payload, result: null };  
     default:
       return state;
   }

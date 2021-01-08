@@ -18,7 +18,7 @@ const Layout = ({ children, title }) => (
         </Col>
       </Row>
     </Content>
-    <Footer className={styles.footer}>© 2020 Keepcoding</Footer>
+    <Footer className={styles.footer}>© 2021 Ramón Beltrán</Footer>
   </DesignLayout>
 );
 
