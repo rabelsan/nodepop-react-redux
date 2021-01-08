@@ -7,6 +7,8 @@ import {
   ADS_SUCCESS,
   ADS_FAILURE,
   ADS_DELETE,
+  ADS_DELETE_SUCCESS,
+  ADS_DELETE_FAILURE,
   ADS_CREATE,
   TAGS_REQUEST,
   TAGS_SUCCESS,
@@ -57,7 +59,15 @@ export const login = credentials => {
 
   export const adsDelete = adsList => ({
     type: ADS_DELETE,
-    payload: adsList,
+  });
+
+  export const adDeleteSuccess = () => ({
+    type: ADS_DELETE_SUCCESS,
+  });
+
+  export const adDeleteFailure = error => ({
+    type: ADS_DELETE_FAILURE,
+    payload: error,
   });
 
   export const loadAds = filters => {
@@ -67,7 +77,7 @@ export const login = credentials => {
         const ads =  await api.adverts.getAdverts(filters);
         dispatch(adsSuccess(ads.result.rows));
       } catch (error) {
-        dispatch(adsFailure(error));
+        dispatch(adDeleteFailure(error));
       }
     };
   };
@@ -76,10 +86,10 @@ export const login = credentials => {
     return async function (dispatch, getState, { history, api }) {
       dispatch(adsDelete());
       try {
-        //const result =  await api.adverts.deleteAdvert(id);
-        //console.log(result);
+        const result = await api.adverts.deleteAdvert(id);
+        dispatch(adDeleteSuccess());
       } catch (error) {
-        dispatch(adsFailure(error));
+        dispatch(adDeleteFailure(error));
       }
     };
   };

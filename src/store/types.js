@@ -8,6 +8,8 @@ export const ADS_REQUEST = 'ads/REQUEST';
 export const ADS_SUCCESS = 'ads/SUCCESS';
 export const ADS_FAILURE = 'ads/FAILURE';
 export const ADS_DELETE = 'ads/DELETE';
+export const ADS_DELETE_SUCCESS = 'ads/DELETE_SUCCESS';
+export const ADS_DELETE_FAILURE = 'ads/DELETE_FAILURE';
 export const ADS_CREATE = 'ads/CREATE';
 
 

@@ -141,7 +141,6 @@ AdvertsPage.propTypes = {
   error: T.string,
   findAds: T.func.isRequired,
   history: T.shape({ push: T.func.isRequired }).isRequired,
-
 };
 
 export default connect(getAds, dispatch => ({
