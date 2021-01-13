@@ -7,10 +7,11 @@ const initialState = {
     loading: false,
     error: null,
   },
-  adStatus: {
+  adDetails: {
     processing: false,
     errorChange: null,
-    result: null,
+    advert: null,
+    isNew: false,
   },
   tags: {
     list: [],
@@ -48,20 +49,28 @@ export const ads = (state = initialState.ads, action) => {
   }
 };
 
-export const adStatus = (state = initialState.adStatus, action) => {
+export const adDetails = (state = initialState.adDetails, action) => {
   switch (action.type) {
-    case types.AD_DELETE:
-      return { ...state, processing: true, errChange: null, result: null };
+    case types.AD_REQUEST:
+      return { ...state, processing: true, errChange: null, advert: null, isNew: false };
+    case types.AD_REQUEST_SUCCESS:
+      return { ...state, processing: false, errChange: null, advert: action.payload.ad, isNew: action.payload.isNew };
+    case types.AD_REQUEST_FAILURE:
+        return { ...state, processing: false, errChange: action.payload, advert:null, isNew: false };
+    case types.AD_DELETE_REQUEST:
+      return { ...state, processing: true, errChange: null, advert: action.payload, isNew: false };
     case types.AD_DELETE_SUCCESS:
-      return { ...state, processing: false, errChange: null, result: action.payload };
+      return { ...state, processing: false, errChange: null, advert: null, isNew: false };
     case types.AD_DELETE_FAILURE:
-        return { ...state, processing: false, errChange: action.payload, result:null };
-    case types.AD_CREATE:
-      return { ...state, processing: true, errChange: false, result: null };
+        return { ...state, processing: false, errChange: action.payload, advert:null, isNew: false };
+    case types.AD_CREATE_REQUEST:
+      return { ...state, processing: true, errChange: null, advert: null, isNew: false };
     case types.AD_CREATE_SUCCESS:
-      return { ...state, processing: false, errChange: false, result: action.payload };
+      return { ...state, processing: false, errChange: null, advert: action.payload, isNew: true };
     case types.AD_CREATE_FAILURE:
-      return { ...state, processing: false, errChange: action.payload, result: null };  
+      return { ...state, processing: false, errChange: action.payload, advert: null, isNew: false }; 
+    case types.AD_RESET_DETAILS:
+      return { ...state, processing: false, errChange: null, advert: null, isNew: false };  
     default:
       return state;
   }

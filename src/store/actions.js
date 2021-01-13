@@ -6,12 +6,16 @@ import {
   ADS_REQUEST,
   ADS_SUCCESS,
   ADS_FAILURE,
-  AD_DELETE,
+  AD_REQUEST,
+  AD_REQUEST_SUCCESS,
+  AD_REQUEST_FAILURE,
+  AD_DELETE_REQUEST,
   AD_DELETE_SUCCESS,
   AD_DELETE_FAILURE,
-  AD_CREATE,
+  AD_CREATE_REQUEST,
   AD_CREATE_SUCCESS,
   AD_CREATE_FAILURE,
+  AD_RESET_DETAILS,
   TAGS_REQUEST,
   TAGS_SUCCESS,
   TAGS_FAILURE,
@@ -59,8 +63,22 @@ export const login = credentials => {
     payload: adsList,
   });
 
-  export const adsCreate = adsList => ({
-    type: AD_CREATE,
+  export const adRequest = () => ({
+    type: AD_REQUEST,
+  });
+
+  export const adRequestFailure = error => ({
+    type: AD_REQUEST_FAILURE,
+    payload: error,
+  });
+
+  export const adRequestSuccess = (ad, isNew) => ({
+    type: AD_REQUEST_SUCCESS,
+    payload: { ad, isNew }
+  });
+
+  export const adCreateRequest = adsList => ({
+    type: AD_CREATE_REQUEST,
   });
 
   export const adCreateSuccess = (result) => ({
@@ -73,8 +91,8 @@ export const login = credentials => {
     payload: error,
   });
 
-  export const adsDelete = adsList => ({
-    type: AD_DELETE,
+  export const adDeleteRequest = adsList => ({
+    type: AD_DELETE_REQUEST,
   });
 
   export const adDeleteSuccess = (result) => ({
@@ -87,24 +105,16 @@ export const login = credentials => {
     payload: error,
   });
 
-  export const loadAds = filters => {
-    return async function (dispatch, getState, { history, api }) {
-      dispatch(adsRequest());
-      try {
-        const ads =  await api.adverts.getAdverts(filters);
-        dispatch(adsSuccess(ads.result.rows));
-      } catch (error) {
-        dispatch(adDeleteFailure(error));
-      }
-    };
-  };
+  export const adResetDetails = () => ({
+    type: AD_RESET_DETAILS,
+  });
 
   export const createAd = id => {
     return async function (dispatch, getState, { history, api }) {
-      dispatch(adsCreate());
+      dispatch(adCreateRequest());
       try {
-        const result = await api.adverts.createAdvert(id);
-        dispatch(adCreateSuccess(result));
+        const ad = await api.adverts.createAdvert(id);
+        dispatch(adCreateSuccess(ad.result));
       } catch (error) {
         dispatch(adCreateFailure(error));
       }
@@ -113,10 +123,34 @@ export const login = credentials => {
 
   export const deleteAd = id => {
     return async function (dispatch, getState, { history, api }) {
-      dispatch(adsDelete());
+      dispatch(adDeleteRequest());
       try {
         const result = await api.adverts.deleteAdvert(id);
         dispatch(adDeleteSuccess(result));
+      } catch (error) {
+        dispatch(adDeleteFailure(error));
+      }
+    };
+  };
+
+  export const loadAd = (id, isNew = false) => {
+    return async function (dispatch, getState, { history, api }) {
+      dispatch(adRequest());
+      try {
+        const ad =  await api.adverts.getAdvert(id);
+        dispatch(adRequestSuccess(ad.result, isNew));
+      } catch (error) {
+        dispatch(adRequestFailure(error));
+      }
+    };
+  };
+
+  export const loadAds = filters => {
+    return async function (dispatch, getState, { history, api }) {
+      dispatch(adsRequest());
+      try {
+        const ads =  await api.adverts.getAdverts(filters);
+        dispatch(adsSuccess(ads.result.rows));
       } catch (error) {
         dispatch(adDeleteFailure(error));
       }

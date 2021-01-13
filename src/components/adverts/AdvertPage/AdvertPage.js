@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import T from 'prop-types';
 import { useParams } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import { useSelector, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Divider, Image, Typography, Statistic, Row, Col, Empty } from 'antd';
 
-import { deleteAd } from '../../../store/actions';
-import { getAdStatus, getAdvertById } from '../../../store/selectors';
+import { loadAd, deleteAd } from '../../../store/actions';
+import { getAdDetails } from '../../../store/selectors';
 
 import Layout from '../../layout';
 import { ConfirmationButton } from '../../shared';
@@ -16,29 +16,36 @@ import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
-function AdvertPage ({ history, delAd, processing, errChange })  {
-  const [form, setForm] = useState({
+function AdvertPage ({ history, delAd, getAd, processing, errChange, advert })  {
+  /* const [form, setForm] = useState({
     advert: null,
     error: null,
-  }); 
+  });  */
 
   const { id } = useParams();
-  const advert = useSelector(getAdvertById(id));
-
+  
   useEffect( () => {
-    if (!advert) {
+      getAd(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]
+  );
+
+  /* useEffect( () => {
+    if (errChange) {
       setForm ({ ...form, error: { message: 'Not found' }});
     } else {
       setForm({ ...form, advert: advert });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }}, [advert]
-  );  
+  );   */
   
   const handleDeleteClick = () => {
-    const { advert } = form;
-    delAd(advert._id);
-    if (!errChange) {
-      history.push('/');
+    //const { advert } = form;
+    if (advert) {
+      delAd(advert._id);
+      if (!errChange) {
+        history.push('/');
+      }
     }  
   };
 
@@ -54,9 +61,9 @@ function AdvertPage ({ history, delAd, processing, errChange })  {
   }
 
   const renderAdvert = () => {
-    const { advert, error } = form;
+    //const { advert, error } = form;
 
-    if (error) {
+    if (errChange) {
       return <Redirect to="/404" />;
     }
 
@@ -124,10 +131,13 @@ function AdvertPage ({ history, delAd, processing, errChange })  {
 AdvertPage.propTypes = {
   history: T.shape({ push: T.func.isRequired }).isRequired,
   delAd: T.func.isRequired,
-  processing: T.bool.isRequired,
+  getAd: T.func.isRequired,
+  processing: T.bool,
   errChange: T.string,
+  advert: T.object,
 };
 
-export default connect(getAdStatus, dispatch => ({
+export default connect(getAdDetails, dispatch => ({
   delAd: (id) => dispatch(deleteAd(id)),
+  getAd: (id) => dispatch(loadAd(id)),
 }))(AdvertPage);

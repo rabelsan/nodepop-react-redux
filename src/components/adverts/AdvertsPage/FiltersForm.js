@@ -18,7 +18,7 @@ export const defaultFilters = {
   tags: [],
 };
 
-function FiltersForm ({findTags, list, error, initialFilters, onSubmit}) {
+function FiltersForm ({findTags, list, initialFilters, onSubmit}) {
   const [filters, setFilters] = useState(initialFilters);
 
   useEffect( 

@@ -1,42 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import T from 'prop-types';
 import { Alert, Divider } from 'antd';
 
-import { createAd } from '../../../store/actions';
-import { getAdStatus } from '../../../store/selectors';
+import { createAd, adResetDetails, loadAd } from '../../../store/actions';
+import { getAdDetails } from '../../../store/selectors';
 
 import Layout from '../../layout';
 import NewAdvertForm from './NewAdvertForm';
-function NewAdvertPage ({ history, newAd, processing, errChange, result }) {
-  const [state, setState] = useState({
+function NewAdvertPage ({ history, resetAd, newAd, getAd, errChange, advert, isNew }) {
+  /* const [form, setForm] = useState({
     error: null,
-  });
+  }); */
 
-  const handleSubmit = advert => {
-    this.resetError();
-    createAd(advert);
+  /* useEffect ( () => {
     if (errChange) {
-      setState(errChange);
-    } else {
-      history.push(`/adverts/${result._id}`);
-    }
+      setForm({ ...form, error: errChange});
+    }}, [errChange]
+  ); */
+
+  useEffect ( () => {
+    if (advert && isNew) {
+      if (!advert.hasOwnProperty('photoUrl')) {
+        getAd(advert._id, isNew);
+      } else {
+        history.push(`/adverts/${advert._id}`);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }}, [advert, isNew]
+  );
+
+  /* useEffect ( () => {
+    if (advert) {
+      resetAd();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }}, []
+  ); */
+
+  const handleSubmit = advertFormData => {
+    //resetError();
+    newAd(advertFormData);
   };
 
-  const resetError = () => setState({ error: null });
+  // const resetError = () => setForm({ error: null });
 
-  const { error } = state;
+  //const { error } = form;
 
   return (
     <Layout title="New advert">
       <Divider>Create an advert</Divider>
       <NewAdvertForm onSubmit={handleSubmit} />
-      {error && (
+      {errChange && (
         <Alert
-          afterClose={resetError}
+          //afterClose={resetError}
           closable
-          message={error}
+          message={errChange}
           showIcon
           type="error"
         />
@@ -47,12 +66,17 @@ function NewAdvertPage ({ history, newAd, processing, errChange, result }) {
 
 NewAdvertPage.propTypes = {
   history: T.shape({ push: T.func.isRequired }).isRequired,
+  resetAd: T.func.isRequired,
   newAd: T.func.isRequired,
-  processing: T.bool.isRequired,
+  getAd: T.func.isRequired,
+  processing: T.bool,
   errChange: T.string,
-  result: T.object,
+  advert: T.object,
+  isNew: T.bool,
 };
 
-export default connect(getAdStatus, dispatch => ({
+export default connect(getAdDetails, dispatch => ({
+  resetAd: () => dispatch(adResetDetails()),
   newAd: (id) => dispatch(createAd(id)),
+  getAd: (id, isNew) => dispatch(loadAd(id, isNew)),
 }))(NewAdvertPage);

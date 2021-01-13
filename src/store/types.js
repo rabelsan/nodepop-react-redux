@@ -8,12 +8,16 @@ export const ADS_REQUEST = 'ads/REQUEST';
 export const ADS_SUCCESS = 'ads/SUCCESS';
 export const ADS_FAILURE = 'ads/FAILURE';
 
-export const AD_DELETE = 'ad/DELETE';
+export const AD_REQUEST = 'ad/REQUEST';
+export const AD_REQUEST_SUCCESS = 'ad/REQUEST_SUCCESS';
+export const AD_REQUEST_FAILURE = 'ad/REQUEST_FAILURE';
+export const AD_DELETE_REQUEST = 'ad/DELETE_REQUEST';
 export const AD_DELETE_SUCCESS = 'ad/DELETE_SUCCESS';
 export const AD_DELETE_FAILURE = 'ad/DELETE_FAILURE';
-export const AD_CREATE = 'ad/CREATE';
+export const AD_CREATE_REQUEST = 'ad/CREATE_REQUEST';
 export const AD_CREATE_SUCCESS = 'ad/CREATE_SUCCESS';
 export const AD_CREATE_FAILURE = 'ad/CREATE_FAILURE';
+export const AD_RESET_DETAILS = 'ad/RESET_DETAILS';
 
 export const TAGS_REQUEST = 'tags/REQUEST';
 export const TAGS_SUCCESS = 'tags/SUCCESS';

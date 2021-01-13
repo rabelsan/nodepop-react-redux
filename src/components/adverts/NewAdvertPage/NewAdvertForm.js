@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
+import { connect } from 'react-redux';
 
 import T from 'prop-types';
 import { Button, Radio, Input, InputNumber, Row, Col } from 'antd';
+
+import { getTags } from '../../../store/selectors';
 
 import TagsSelect from '../TagsSelect';
 import { FormField, InputImage } from '../../shared';
@@ -11,7 +14,7 @@ import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
 
 import styles from './NewAdvertForm.module.css';
 
-function NewAdvertForm ({onSubmit}) {
+function NewAdvertForm ({ onSubmit, list }) {
   const [state, setState] = useState({
     name: '',
     price: 0,
@@ -44,18 +47,18 @@ function NewAdvertForm ({onSubmit}) {
     return formData;
   };
 
-  const handleNameChange = ev => setState({ name: ev.target.value });
-  const handlePriceChange = price => setState({ price });
-  const handleTagsChange = tags => setState({ tags });
-  const handlePhotoChange = photo => setState({ photo });
-  const handleSaleChange = ev => setState({ sale: ev.target.value });
+  const handleNameChange = ev => setState({ ...state, name: ev.target.value });
+  const handlePriceChange = price => setState({ ...state, price });
+  const handleTagsChange = tags => setState({ ...state, tags });
+  const handlePhotoChange = photo => setState({ ...state, photo });
+  const handleSaleChange = ev => setState({ ...state, sale: ev.target.value });
 
   const handleSubmit = ev => {
     ev.preventDefault();
     onSubmit(getFormData());
   };
 
-  const { name, price, tags, sale } = this.state;
+  const { name, price, tags, sale } = state;
     
   return (
     <form onSubmit={handleSubmit}>
@@ -81,7 +84,7 @@ function NewAdvertForm ({onSubmit}) {
         </Col>
         <Col span={11} offset={2}>
           <FormField label="Tags">
-            <TagsSelect onChange={handleTagsChange} value={tags} />
+            <TagsSelect onChange={handleTagsChange} options={list} value={tags}/>
           </FormField>
           <FormField label="Type">
             <Radio.Group
@@ -112,6 +115,7 @@ function NewAdvertForm ({onSubmit}) {
 
 NewAdvertForm.propTypes = {
   onSubmit: T.func.isRequired,
+  list: T.arrayOf(T.string),
 };
 
-export default NewAdvertForm;
+export default connect(getTags) (NewAdvertForm);

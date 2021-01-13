@@ -12,13 +12,13 @@ import AdvertCard from './AdvertCard';
 import { loadAds } from '../../../store/actions';
 import { getAds } from '../../../store/selectors';
 
-function AdvertsPage  ({adverts, loading, error, findAds, history}) {
+function AdvertsPage  ({adverts, loading, error, filterAds, history}) {
   const [form, setForm] = useState({
     filters: storage.get('filters') || defaultFilters,
   });
 
   useEffect(
-    () => { findAds(formatFilters()); }
+    () => { filterAds(formatFilters()); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , [form]
   );
@@ -139,10 +139,10 @@ AdvertsPage.propTypes = {
   adverts: T.arrayOf(T.object).isRequired,
   loading: T.bool.isRequired,
   error: T.string,
-  findAds: T.func.isRequired,
+  filterAds: T.func.isRequired,
   history: T.shape({ push: T.func.isRequired }).isRequired,
 };
 
 export default connect(getAds, dispatch => ({
-  findAds: (filters) => dispatch(loadAds(filters)),
+  filterAds: (filters) => dispatch(loadAds(filters)),
 }))(AdvertsPage);
