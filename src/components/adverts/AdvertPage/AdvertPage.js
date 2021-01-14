@@ -17,11 +17,6 @@ import { formatter } from '../../../utils/numbers';
 
 const { Title } = Typography;
 function AdvertPage ({ history, delAd, getAd, processing, errChange, advert })  {
-  /* const [form, setForm] = useState({
-    advert: null,
-    error: null,
-  });  */
-
   const { id } = useParams();
   
   useEffect( () => {
@@ -29,23 +24,11 @@ function AdvertPage ({ history, delAd, getAd, processing, errChange, advert })  
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]
   );
-
-  /* useEffect( () => {
-    if (errChange) {
-      setForm ({ ...form, error: { message: 'Not found' }});
-    } else {
-      setForm({ ...form, advert: advert });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }}, [advert]
-  );   */
   
   const handleDeleteClick = () => {
     //const { advert } = form;
     if (advert) {
-      delAd(advert._id);
-      if (!errChange) {
-        history.push('/');
-      }
+      delAd(advert._id).then(history.push('/'));
     }  
   };
 
@@ -61,8 +44,6 @@ function AdvertPage ({ history, delAd, getAd, processing, errChange, advert })  
   }
 
   const renderAdvert = () => {
-    //const { advert, error } = form;
-
     if (errChange) {
       return <Redirect to="/404" />;
     }
