@@ -31,5 +31,5 @@ describe('--------------auth login actions TESTS-----------------', () => {
   it('should create an AUTH_LOGIN_SUCCESS action which contains loggedUserToken obj', () => {
     expect(action).toMatchObject({payload: loggedUserToken});
   });
-  
+
 }); 
