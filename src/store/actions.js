@@ -21,6 +21,8 @@ import {
   TAGS_FAILURE,
 } from './types';
 
+import * as adsApi from '../api/adverts';
+
 export const authLoginRequest = () => ({
   type: AUTH_LOGIN_REQUEST,
 });
@@ -146,13 +148,13 @@ export const login = credentials => {
   };
 
   export const loadAds = filters => {
-    return async function (dispatch, getState, { history, api }) {
+    return async function (dispatch, getState) {
       dispatch(adsRequest());
       try {
-        const ads =  await api.adverts.getAdverts(filters);
+        const ads =  await adsApi.getAdverts(filters);
         dispatch(adsSuccess(ads.result.rows));
       } catch (error) {
-        dispatch(adDeleteFailure(error));
+        dispatch(adsFailure(error));
       }
     };
   };
