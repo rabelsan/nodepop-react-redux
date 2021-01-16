@@ -1,25 +1,26 @@
-import { AD_CREATE_SUCCESS } from './types';
+import { AD_CREATE_SUCCESS, TAGS_SUCCESS } from './types';
 
-import { adDetails } from './reducers';
+import { adDetails, tags } from './reducers';
 
 describe('adDetails', () => {
   test('should handle a AD_CREATE_SUCCESS action', () => {
-    const state = [
-      { id: '1', likes: [] },
-      { id: '2', likes: [] },
-    ];
+    const state = { processing: false, errChange: null,  advert: null, isNew: false };
     const action = {
       type: AD_CREATE_SUCCESS,
-      payload: {
-        tweetId: '1',
-        like: 'like',
-      },
+      payload: 'advert',
     };
-    const expectedState = [
-      { id: '1', likes: ['like'] },
-      { id: '2', likes: [] },
-    ];
-    expect(tweets(state, action)).toEqual(expectedState);
+    const expectedState = { processing: false, errChange: null,  advert: 'advert', isNew: true };
+    expect(adDetails(state, action)).toEqual(expectedState);
+  });
+
+  test('should handle a TAGS_SUCCESS action', () => {
+    const state = { list: [], error: null };
+    const action = {
+      type: TAGS_SUCCESS,
+      payload: ['work', 'lifestyle', 'mobile', 'motor'],
+    };
+    const expectedState = { list: ['work', 'lifestyle', 'mobile', 'motor'], error: null };
+    expect(tags(state, action)).toEqual(expectedState);
   });
 
   test('should handle ANY action', () => {
@@ -27,6 +28,6 @@ describe('adDetails', () => {
     const action = {
       type: 'ANY',
     };
-    expect(tweets(state, action)).toEqual(state);
+    expect(adDetails(state, action)).toEqual(state);
   });
 });
