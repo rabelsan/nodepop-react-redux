@@ -1,9 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import NewAdvertForm from './NewAdvertForm';
 import { createAd }  from '../../../store/actions';
 import Layout from '../../layout';
@@ -44,9 +41,6 @@ describe('NewAdvertPage', () => {
   });
 
   test('NewAdvertForm should receive onSubmit', () => {
-    const event = {
-      preventDefault: jest.fn(),
-    };
     const wrapper = render();
     expect(wrapper.find('Connect(NewAdvertForm)').getElement().props.onSubmit).toBeDefined();
   });
