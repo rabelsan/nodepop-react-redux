@@ -1,7 +1,8 @@
 import React from 'react';
 import T from 'prop-types';
-import { Button, Checkbox, Input } from 'antd';
+import { Button, Checkbox } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import InputWrapper from '../../../utils/InputWrapper';
 
 import useForm from '../../../hooks/useForm';
 import styles from './LoginForm.module.css';
@@ -26,14 +27,32 @@ function LoginForm({ onSubmit, loading }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Input
+      <InputWrapper 
+        inputType={null}
+        name="email"
+        className="styles.input"
+        prefix={<MailOutlined />}
+        placeholder="Email"
+        onChange={handleChange}
+        value={email}
+      />
+      <InputWrapper
+        inputType="Password"
+        name="password"
+        className="styles.input"
+        prefix={<LockOutlined />}
+        placeholder="Password"
+        onChange={handleChange}
+        value={password}
+      />
+      {/* <Input
         name="email"
         className={styles.input}
         prefix={<MailOutlined />}
         placeholder="Email"
         onChange={handleChange}
         value={email}
-      />
+      /> 
       <Input.Password
         name="password"
         className={styles.input}
@@ -41,7 +60,7 @@ function LoginForm({ onSubmit, loading }) {
         placeholder="Password"
         onChange={handleChange}
         value={password}
-      />
+      /> */}
       <Checkbox
         name="remember"
         className={styles.input}
