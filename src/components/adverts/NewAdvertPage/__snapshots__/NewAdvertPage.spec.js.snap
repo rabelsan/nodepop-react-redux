@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewAdvertPage snapshot 1`] = `
+<Layout
+  className="layout"
+>
+  <Header />
+  <Content
+    className="main"
+  >
+    <Row
+      className="row"
+    >
+      <Col
+        className="col"
+        offset={4}
+        span={16}
+      >
+        <Title
+          level={2}
+        >
+          New advert
+        </Title>
+        <div>
+          <Divider>
+            Create an advert
+          </Divider>
+          <Connect(NewAdvertForm)
+            onSubmit={[Function]}
+          />
+          <Alert
+            closable={true}
+            message="Error"
+            showIcon={true}
+            type="error"
+          />
+        </div>
+      </Col>
+    </Row>
+  </Content>
+  <Footer
+    className="footer"
+  >
+    © 2021 Ramón Beltrán
+  </Footer>
+</Layout>
+`;
+
+exports[`NewAdvertPage snapshot with title 1`] = `
+<Layout
+  className="layout"
+>
+  <Header />
+  <Content
+    className="main"
+  >
+    <Row
+      className="row"
+    >
+      <Col
+        className="col"
+        offset={4}
+        span={16}
+      >
+        <Title
+          level={2}
+        >
+          New advert
+        </Title>
+        <div>
+          <Divider>
+            Create an advert
+          </Divider>
+          <Connect(NewAdvertForm)
+            onSubmit={[Function]}
+          />
+          <Alert
+            closable={true}
+            message="Error"
+            showIcon={true}
+            type="error"
+          />
+        </div>
+      </Col>
+    </Row>
+  </Content>
+  <Footer
+    className="footer"
+  >
+    © 2021 Ramón Beltrán
+  </Footer>
+</Layout>
+`;
