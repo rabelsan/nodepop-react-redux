@@ -35,10 +35,10 @@ function AdvertsPage  ({adverts, loading, error, filterAds, history}) {
     if (['sell', 'buy'].includes(sale)) {
       filters.sale = sale === 'sell';
     }
-    if (price.length) {
+    if (price && price.length) {
       filters.price = price.join('-');
     }
-    if (tags.length) {
+    if (tags && tags.length) {
       filters.tags = tags.join(',');
     }
     return filters;
